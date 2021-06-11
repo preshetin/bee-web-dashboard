@@ -3,7 +3,9 @@ import React from "react";
 const ButtonOption = ({ value, size, isDisabled, onClick }) => {
   if (isDisabled) {
     return (
-      <button className={`button ${size} is-static is-active is-link`}>{value}</button>
+      <button className={`button ${size} is-static is-active is-link`}>
+        {value}
+      </button>
     );
   } else {
     return (
@@ -19,8 +21,14 @@ const ButtonOption = ({ value, size, isDisabled, onClick }) => {
   }
 };
 
-const OptionSelector = ({ value, size, onChange, options, preText, afterText }) => {
-
+const OptionSelector = ({
+  value,
+  size,
+  onChange,
+  options,
+  preText,
+  afterText,
+}) => {
   return (
     <div className="box">
       <p>{preText}</p>
