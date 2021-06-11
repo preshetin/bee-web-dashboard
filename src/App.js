@@ -9,6 +9,7 @@ function App() {
   const [users, setUsers] = useState(null);
 
   const [selectedParticipantType, setSelectedParticipantType] = useState(null);
+  const [selectedSkill, setSelectedSkill] = useState(null)
 
   useEffect(() => {
     function loadParticipantsData() {
@@ -41,11 +42,21 @@ function App() {
   if (participants === null) return "Loading....";
   if (users === null) return "Loading....";
 
+  const availableSkills = buildAvailableSkills(participants)
+
   const filteredParticipants = participants.filter((participant) => {
     if (selectedParticipantType === null) {
-      return true;
+      if (selectedSkill === null) {
+        return true;
+      }
+      return participant.skills.includes(selectedSkill);
     }
-    return participant.sk.split("__")[0] === selectedParticipantType;
+
+    if (selectedSkill === null) {
+      return participant.sk.split("__")[0] === selectedParticipantType;
+    }
+
+    return participant.sk.split("__")[0] === selectedParticipantType && participant.skills.includes(selectedSkill);
   });
 
   return (
@@ -54,13 +65,26 @@ function App() {
       <br />
 
       <h1 class="title ">WFAnywhere Hackathon</h1>
+      
       <OptionSelector
         preText=""
         afterText=""
+        isMonolitic
         size="is-large"
         options={["solo-participant", "idea-author"]}
         value={selectedParticipantType}
+        onClickOnActive={() => setSelectedParticipantType(null)}
         onChange={setSelectedParticipantType}
+      />
+
+      <OptionSelector
+        preText=""
+        afterText=""
+        size="is-small"
+        options={availableSkills}
+        value={selectedSkill}
+        onClickOnActive={() => setSelectedSkill(null)}
+        onChange={setSelectedSkill}
       />
 
       <div className="columns is-2 is-multiline  is-mobile">
@@ -97,8 +121,10 @@ function Participant({ participant, slackUser }) {
               </figure>
             </div>
             <div class="media-content">
-              <p class="title is-4">{slackUser.real_name}</p>
-              <p class="subtitle is-6">@{slackUser.name}</p>
+              <p class="title is-4">{slackUser.real_name}
+                {participant.teamName && ` (Team ${participant.teamName})`}
+              </p>
+              <p class="subtitle is-6">@{slackUser.name}, {participantType}</p>
             </div>
           </div>
 
@@ -127,13 +153,16 @@ function Participant({ participant, slackUser }) {
       </div>
     </div>
   );
+}
 
-  return (
-    <div className="column is-one-third">
-      <b></b>
-      <div>{participantType}</div>
-    </div>
-  );
+function buildAvailableSkills(participants) {
+  let result = [
+  ]
+  for (let participant of participants) {
+    result.push(...participant.skills)
+  }
+
+  return Array.from(new Set(result))
 }
 
 export default App;

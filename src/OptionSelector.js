@@ -1,9 +1,9 @@
 import React from "react";
 
-const ButtonOption = ({ value, size, isDisabled, onClick }) => {
-  if (isDisabled) {
+const ButtonOption = ({ value, size, isActive, onClickOnActive, onClick }) => {
+  if (isActive) {
     return (
-      <button className={`button ${size} is-static is-active is-link`}>
+      <button onClick={onClickOnActive} className={`button ${size} is-active is-link`}>
         {value}
       </button>
     );
@@ -25,20 +25,23 @@ const OptionSelector = ({
   value,
   size,
   onChange,
+  isMonolitic,
+  onClickOnActive,
   options,
   preText,
   afterText,
 }) => {
   return (
-    <div className="box">
+    <div className="" style={{margin: '10px', marginBottom: '30px'}}>
       <p>{preText}</p>
-      <div className="buttons has-addons">
+      <div className={`buttons ${isMonolitic ? 'has-addons' : ''}`}>
         {options.map((seatOption) => (
           <ButtonOption
             key={seatOption}
             size={size}
-            isDisabled={value === seatOption}
+            isActive={value === seatOption}
             onClick={onChange}
+            onClickOnActive={onClickOnActive}
             value={seatOption}
           />
         ))}
