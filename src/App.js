@@ -87,7 +87,7 @@ function App() {
         onChange={setSelectedSkill}
       />
 
-      <div className="columns is-2 is-multiline  is-mobile">
+      <div className="columns is-2 is-multiline is-desktop">
         {filteredParticipants.map((participant) => (
           <Participant
             key={participant.sk}
@@ -106,9 +106,10 @@ function Participant({ participant, slackUser }) {
   if (slackUser === undefined) return "Loading...";
 
   const participantType = participant.sk.split("__")[0];
+  const participantTypeIcon = (participantType === 'idea-author') ? '💡 ' : '👽 ';
 
   return (
-    <div className="column is-flex is-half">
+    <div className="column is-flex is-half-desktop">
       <div class="card" style={{ width: "100%" }}>
         <div class="card-content">
           <div class="media">
@@ -121,10 +122,11 @@ function Participant({ participant, slackUser }) {
               </figure>
             </div>
             <div class="media-content">
-              <p class="title is-4">{slackUser.real_name}
+              <p class="title is-4">
+                {slackUser.real_name}
                 {participant.teamName && ` (Team ${participant.teamName})`}
               </p>
-              <p class="subtitle is-6">@{slackUser.name}, {participantType}</p>
+              <p class="subtitle is-6">@{slackUser.name}, {participantTypeIcon} {participantType} </p>
             </div>
           </div>
 
