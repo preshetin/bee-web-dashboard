@@ -1,14 +1,14 @@
 import React from "react";
 
-const ButtonOption = ({ value, isDisabled, onClick }) => {
+const ButtonOption = ({ value, size, isDisabled, onClick }) => {
   if (isDisabled) {
     return (
-      <button className="button is-static is-active is-link">{value}</button>
+      <button className={`button ${size} is-static is-active is-link`}>{value}</button>
     );
   } else {
     return (
       <button
-        className="button"
+        className={`button ${size}`}
         onClick={() => {
           onClick(value);
         }}
@@ -19,8 +19,8 @@ const ButtonOption = ({ value, isDisabled, onClick }) => {
   }
 };
 
-const OptionSelector = ({ value, onChange, options, preText, afterText }) => {
-  
+const OptionSelector = ({ value, size, onChange, options, preText, afterText }) => {
+
   return (
     <div className="box">
       <p>{preText}</p>
@@ -28,6 +28,7 @@ const OptionSelector = ({ value, onChange, options, preText, afterText }) => {
         {options.map((seatOption) => (
           <ButtonOption
             key={seatOption}
+            size={size}
             isDisabled={value === seatOption}
             onClick={onChange}
             value={seatOption}

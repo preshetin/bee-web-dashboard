@@ -22,8 +22,12 @@ function App() {
         setParticipants(participantsResponse.data.Items)
 
         const usersResponse = await api.slackApi('users.list');
-        setUsers(usersResponse.data.members)
-
+        const resultedUsers = [...usersResponse.data.members].sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        })
+        setUsers(resultedUsers);
       } catch (e) {
         console.error(e)
         // onError(e);
@@ -45,13 +49,14 @@ function App() {
 
   return (
     <div class="container is-max-desktop">
-      <div class="notification is-primary">
-        This container has a <code>max-width</code> of <code>$desktop - $container-offset</code> on widescreen and fullhd.
-      </div>
+      <br />
+      <br />
 
+      <h1 class="title ">WFAnywhere Hackathon</h1>
       <OptionSelector
-        preText="Type"
+        preText=""
         afterText=""
+        size='is-large'
         options={["solo-participant", "idea-author"]}
         value={selectedParticipantType}
         onChange={setSelectedParticipantType}
@@ -79,8 +84,8 @@ function Participant ({participant, slackUser}) {
 
 
   return (
-<div className="column is-half">
-  <div class="card">
+<div className="column is-flex is-half">
+  <div class="card" style={{width: '100%'}}>
     <div class="card-content">
       <div class="media">
         <div class="media-left">
@@ -94,13 +99,26 @@ function Participant ({participant, slackUser}) {
         </div>
       </div>
 
-      <div class="content">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-        <a href="#">#css</a> <a href="#">#responsive</a>
-        <br />
-        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-      </div>
+      {participant.ideaDescription && (
+        <div class="content">
+          {participant.ideaDescription}
+          <br />
+          {/* <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time> */}
+        </div>
+      ) }
+
+      {participant.experience && (
+        <div class="content">
+          {participant.experience}
+          <br />
+          {/* <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time> */}
+        </div>
+      ) }
+
+      {participant.skills.map(skill => (
+        <span class="tag is-light" style={{margin: '0.3rem'}}>{skill}</span>
+      ))}
+
     </div>
   </div>
 </div>
